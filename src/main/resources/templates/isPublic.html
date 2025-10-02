@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Shared Memos</title>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap"
+            rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#10B981", // Emerald-500
+                            "background-light": "#F9FAFB", // Gray-50
+                            "background-dark": "#1F2937", // Gray-800
+                        },
+                        fontFamily: {
+                            display: ["Noto Sans KR", "sans-serif"],
+                        },
+                        borderRadius: {
+                            DEFAULT: "0.5rem",
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            body {
+                font-family: "Noto Sans KR", sans-serif;
+            }
+            @font-face {
+                font-family: "Isamanru";
+                src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff")
+                    format("woff");
+                font-weight: 300;
+                font-display: swap;
+            }
+            h1 {
+                font-family: "Isamanru", serif;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 dark:bg-gray-900 font-display">
+        <div class="container mx-auto p-4">
+            <header class="flex justify-between items-center py-2 mb-5">
+                <h1 class="text-2xl font-bold text-gray-500 dark:text-white" style="color: #16a34a">Memo Studio</h1>
+            </header>
+            <main>
+                <div class="bg-white dark:bg-background-dark p-10 rounded-lg shadow-md">
+                    <div class="space-y-6">
+                        <div
+                            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 transition-shadow hover:shadow-lg"
+                        >
+                        <!-- ----------------------------------------- -->
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800 dark:text-white">프로젝트 아이디어</h3>
+                                    <p class="text-gray-600 dark:text-gray-400 mt-2">
+                                        새로운 모바일 앱 개발을 위한 초기 아이디어 브레인스토밍. 사용자 중심 디자인에
+                                        초점을 맞추고...
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0 ml-4">
+                                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400"
+                                        >member_ID</span
+                                    >
+                                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400"
+                                        >김민준</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="text-right text-xs text-gray-400 dark:text-gray-500 mt-4">2023-10-27</div>
+                        </div>
+                        <!-- ----------------------------------------- -->
+                    <div class="flex justify-center mt-8">
+                        <nav class="flex items-center space-x-2">
+                            <button
+                                class="px-3 py-1 rounded-md text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700"
+                                disabled=""
+                            >
+                                <span class="material-icons text-lg">chevron_left</span>
+                            </button>
+                            <button class="px-3 py-1 rounded-md text-white bg-primary">1</button>
+                            <button
+                                class="px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            >
+                                2
+                            </button>
+                            <button
+                                class="px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            >
+                                3
+                            </button>
+                            <button
+                                class="px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            >
+                                <span class="material-icons text-lg">chevron_right</span>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

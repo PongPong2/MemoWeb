@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <style type="text/tailwindcss">
+        :root {
+            --primary-color: #4F46E5;
+            --background-light: #F9FAFB;
+            --background-dark: #111827;
+            --card-light: #FFFFFF;
+            --card-dark: #1F2937;
+            --text-light: #1F2937;
+            --text-dark: #F9FAFB;
+            --text-secondary-light: #6B7280;
+            --text-secondary-dark: #9CA3AF;
+            --input-bg-light: #FFFFFF;
+            --input-bg-dark: #374151;
+            --border-light: #D1D5DB;
+            --border-dark: #4B5563;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .dark .dark\:placeholder-text-secondary-dark::placeholder {
+            color: var(--text-secondary-dark);
+        }
+        @font-face {
+            font-family: 'Isamanru';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+            font-weight: 300;
+            font-display: swap;
+        }
+        h1{
+            font-family: 'Isamanru',serif;
+        }
+    </style>
+</head>
+<body class="bg-[var(--background-light)] dark:bg-[var(--background-dark)] text-[var(--text-light)] dark:text-[var(--text-dark)] flex items-center justify-center min-h-screen px-4">
+<div class="w-full max-w-md">
+<div class="text-center mb-8">
+<h1 class="text-3xl font-bold tracking-tight text-[var(--text-light)] dark:text-[var(--text-dark)]" style="color:#16A34A">Memo Studio</h1>
+</div>
+<div class="bg-[var(--card-light)] dark:bg-[var(--card-dark)] shadow-lg rounded-xl p-8">
+<form class="space-y-6" action="/login" method="post">
+<div>
+<label class="block text-sm font-medium text-[var(--text-light)] dark:text-[var(--text-dark)] mb-2" for="email" style="color:#16A34A">Email</label>
+    <input class="w-full px-4 py-3 bg-[var(--input-bg-light)] dark:bg-[var(--input-bg-dark)] border border-[var(--border-light)] dark:border-[var(--border-dark)] rounded-lg text-[var(--text-light)] dark:text-[var(--text-dark)] focus:ring-2 focus:ring-[#3282f6] focus:border-[#3282f6] transition duration-200" id="email" name="email" placeholder="Email" type="email"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block text-sm font-medium text-[var(--text-light)] dark:text-[var(--text-dark)]" for="password" style="color:#16A34A">Password</label>
+</div>
+<input class="w-full px-4 py-3 bg-[var(--input-bg-light)] dark:bg-[var(--input-bg-dark)] border border-[var(--border-light)] dark:border-[var(--border-dark)] rounded-lg text-[var(--text-light)] dark:text-[var(--text-dark)] focus:ring-2 focus:ring-[#3282f6] focus:border-[#3282f6]: transition duration-200" id="password" name="pw" placeholder="PassWord" type="password"/>
+</div>
+<div>
+    <button class="w-full bg-[#16A34A] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#15803d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16A34A] dark:focus:ring-offset-[var(--card-dark)] transition duration-300" type="submit" onclick="handleClick()" >Login</button>
+</div>
+</form>
+<div class="mt-6 text-center">
+<p class="text-sm text-[var(--text-secondary-light)] dark:text-[var(--text-secondary-dark)]">
+                Don't have an account? 
+                <a class="font-medium text-[var(--primary-color)] hover:underline" href="/signup" style="color: #16A34A">Sign up</a>
+</p>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" ></script>
+<script th:inline="javascript">
+        var msg = [[${msg}]];
+        if (msg) {
+            alert(msg);
+        }
+
+        const handleClick = () => {
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+
+            if (emailInput.value.trim() === "") {
+                alert("이메일을 입력하세요 !");
+                emailInput.focus();
+                return;
+            }
+            if (passwordInput.value.trim() === "") {
+                alert("비밀번호를 입력하세요 !");
+                passwordInput.focus();
+                return;
+            }
+
+            return true;
+        }
+</script>
+</body></html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Memo Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#16A34A',
+                        "background-light": '#F3F4F6',
+                        "background-dark": '#1F2937',
+                        "card-light": '#FFFFFF',
+                        "card-dark": '#374151',
+                        "text-light": '#111827',
+                        "text-dark": '#F9FAFB',
+                        "border-light": '#E5E7EB',
+                        "border-dark": '#4B5563',
+                        "memo-light": '#FEF9C3',
+                        "memo-dark": '#4B5563',
+                        "memo-text-light": '#713F12',
+                        "memo-text-dark": '#FDE68A',
+                    },
+                    fontFamily: {
+                        display: ['Noto Sans KR', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: '0.5rem',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 }
+        .memo-container::-webkit-scrollbar { width: 8px; }
+        .memo-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .memo-container::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        .memo-container::-webkit-scrollbar-thumb:hover { background: #555; }
+        .dark .memo-container::-webkit-scrollbar-track { background: #374151; }
+        .dark .memo-container::-webkit-scrollbar-thumb { background: #6b7280; }
+        .dark .memo-container::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        @font-face { font-family: 'Isamanru'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff'); font-weight: 300; font-display: swap; }
+        h1{ font-family: 'Isamanru',serif; }
+        @font-face {
+            font-family: 'LeeSunSinDotum';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/YiSunShinDotumM.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+        span{ font-family: 'LeeSunSinDotum', serif; }
+
+        #sharedMemos{
+            color: #16A34A;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="flex flex-col h-screen">
+    <header class="flex items-center justify-between p-4 border-b bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark">
+        <h1 class="text-2xl font-bold" style="color:#16A34A">Memo Studio</h1>
+        <div class="flex items-center space-x-4" th:if="${session.member != null}">
+            <span th:text="|✿ Hello ${session.member.name} ✿|"></span>
+            <button class="px-3 py-1 font-semibold text-white rounded-md bg-[#16A34A] hover:bg-[#15803d]" onclick="location.href='/login'">로그아웃</button>
+        </div>
+    </header>
+    <main class="flex flex-1 p-4 overflow-hidden">
+        <div class="flex flex-col w-3/5 pr-4">
+            <div class="flex items-center mb-4 space-x-2" id="category-buttons">
+                <button class="px-4 py-2 text-sm font-semibold text-white rounded-md bg-primary hover:bg-opacity-90 category-btn">List</button>
+                <button class="px-4 py-2 text-sm font-semibold bg-gray-200 rounded-md dark:bg-gray-700 text-text-light dark:text-text-dark hover:bg-gray-300 dark:hover:bg-gray-600 category-btn">OilList</button>
+                <button class="px-4 py-2 text-sm font-semibold bg-gray-200 rounded-md dark:bg-gray-700 text-text-light dark:text-text-dark hover:bg-gray-300 dark:hover:bg-gray-600 category-btn">ShoppingList</button>
+                <button class="px-4 py-2 text-sm font-semibold bg-gray-200 rounded-md dark:bg-gray-700 text-text-light dark:text-text-dark hover:bg-gray-300 dark:hover:bg-gray-600 category-btn">Gemini</button>
+            </div>
+            <div class="flex-1 p-6 border rounded-md bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                    <input class="flex-grow p-2 text-lg font-bold bg-transparent border-0 rounded-md focus:ring-0 text-text-light dark:text-text-dark" id="memo-title" placeholder="제목" type="text"/>
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="1" class="sr-only peer" name="checkBox">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                        </label>
+                        <span>중요!</span>
+                    </div>
+                </div>
+                <hr>
+                <textarea class="flex-1 w-full p-2 bg-transparent border-0 rounded-md resize-none focus:ring-0 text-text-light dark:text-text-dark" id="memo-content" placeholder="→ 메모를 작성해주세요 ←"></textarea>
+
+                <div id="gemini-input-container" class="items-center hidden pt-4 mt-4 border-t border-border-light dark:border-border-dark">
+                    <input type="text" id="gemini-prompt" placeholder="Gemini에게 물어볼 내용을 입력하세요..." class="w-full px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 border rounded-md focus:ring-2 focus:ring-primary dark:border-gray-700">
+                    <button id="gemini-ask-btn" class="ml-2 px-4 py-2 text-sm font-semibold text-white rounded-md bg-primary hover:bg-opacity-90 whitespace-nowrap">☁︎</button>
+                </div>
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="px-6 py-2 font-semibold text-white rounded-md bg-primary hover:bg-opacity-90" id="add-memo-btn">등록</button>
+            </div>
+        </div>
+        <div class="w-2/5 p-4 border rounded-md bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark overflow-y-auto memo-container" id="memo-container-grid"></div>
+        <div class="w-2/5 p-4 border rounded-md bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark overflow-y-auto memo-container hidden" id="sharing-memo-container"></div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const memoTitle = document.getElementById('memo-title');
+        const memoContent = document.getElementById('memo-content');
+        const addMemoBtn = document.getElementById('add-memo-btn');
+        const memoContainerGrid = document.getElementById('memo-container-grid');
+        const categoryButtonsContainer = document.getElementById('category-buttons');
+        const geminiInputContainer = document.getElementById('gemini-input-container');
+        const isPublicCheckbox = document.querySelector('input[name="checkBox"]');
+        // ✅ memoEditor 관련 로직 모두 제거
+
+        // ✅ 메모 전체 로딩 (로그인 사용자 전용)
+        async function loadMemos() {
+            try {
+                const res = await fetch('/api/memos');
+                if (!res.ok) throw new Error("메모 로딩 실패");
+                const memos = await res.json();
+                memoContainerGrid.innerHTML = '';
+                memos.forEach(m => {
+                    const item = document.createElement('div');
+                    item.className = 'relative p-4 mb-4 rounded-md shadow-md bg-memo-light dark:bg-memo-dark memo-item';
+                    item.dataset.memoId = m.id;
+
+                    // ✅ 로드 시 '중요' 메모에 테두리 적용
+                    if (m.isPublic === true || m.public === true) {
+                        item.classList.add('border-2', 'border-red-500', 'dark:border-red-400');
+                    }
+
+                    item.innerHTML = `
+                        <p class="text-sm text-memo-text-light dark:text-memo-text-dark break-words">
+                            <strong>${m.title}</strong><br>${m.content?.replace(/\n/g, "<br>")}
+                        </p>
+                        <button class="absolute top-2 right-2 text-memo-text-light dark:text-memo-text-dark hover:text-red-500 delete-memo">
+                            <span class="text-base material-symbols-outlined">close</span>
+                        </button>
+                    `;
+                    memoContainerGrid.appendChild(item);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // ✅ 공유 메모 로딩 함수 (공개 메모만)
+        async function loadSharingMemos() {
+            try {
+                const res = await fetch('/api/memos');
+                if (!res.ok) throw new Error("공유 메모 로딩 실패");
+                const memos = await res.json();
+                const sharingMemoContainer = document.getElementById('sharing-memo-container');
+                sharingMemoContainer.innerHTML = '';
+                memos.filter(m => m.isPublic === true || m.public === true).forEach(m => {
+                    const item = document.createElement('div');
+                    item.className = 'relative p-4 mb-4 rounded-md shadow-md bg-memo-light dark:bg-memo-dark memo-item';
+                    // '중요' 메모에 테두리 적용
+                    if (m.isPublic === true || m.public === true) {
+                        item.classList.add('border-2', 'border-red-500', 'dark:border-red-400');
+                    }
+                    item.innerHTML = `
+                        <p class="text-sm text-memo-text-light dark:text-memo-text-dark break-words">
+                            <strong>${m.title}</strong><br>${m.content?.replace(/\n/g, "<br>")}
+                        </p>
+                    `;
+                    sharingMemoContainer.appendChild(item);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // --- 카테고리 버튼 로직 확장 ---
+        categoryButtonsContainer.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                const clickedButtonText = e.target.textContent;
+
+                if (clickedButtonText === 'Gemini') {
+                    geminiInputContainer.classList.remove('hidden');
+                    geminiInputContainer.classList.add('flex');
+                    memoContent.placeholder = 'Gemini의 답변이 여기에 표시됩니다...';
+                } else {
+                    geminiInputContainer.classList.add('hidden');
+                    geminiInputContainer.classList.remove('flex');
+                    memoContent.placeholder = '→ 메모를 작성해주세요 ←';
+                }
+
+                const buttons = categoryButtonsContainer.querySelectorAll('.category-btn');
+                buttons.forEach(button => {
+                    button.classList.remove('bg-primary', 'text-white');
+                    button.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-text-light', 'dark:text-text-dark', 'hover:bg-gray-300', 'dark:hover:bg-gray-600');
+                });
+                e.target.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-text-light', 'dark:text-text-dark', 'hover:bg-gray-300', 'dark:hover:bg-gray-600');
+                e.target.classList.add('bg-primary', 'text-white');
+                memoTitle.value = clickedButtonText;
+
+                if (clickedButtonText === 'Sharing Memo') {
+                    document.getElementById('memo-container-grid').classList.add('hidden');
+                    document.getElementById('sharing-memo-container').classList.remove('hidden');
+                    await loadSharingMemos();
+                } else {
+                    document.getElementById('memo-container-grid').classList.remove('hidden');
+                    document.getElementById('sharing-memo-container').classList.add('hidden');
+                }
+            }
+        });
+
+        // --- 등록 로직 ---
+        const addMemo = async () => {
+            const title = memoTitle.value.trim();
+            const content = memoContent.value.trim();
+            const isPublicValue = isPublicCheckbox.checked;
+
+            if (!title) { alert("제목을 입력해주세요."); memoTitle.focus(); return; }
+            if (!content) { alert("내용을 입력해주세요."); memoContent.focus(); return; }
+
+            const memoData = { title, content, is_public: isPublicValue };
+
+            try {
+                const response = await fetch('/api/memos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(memoData),
+                });
+
+                if (response.ok) {
+                    const savedMemo = await response.json();
+
+                    const item = document.createElement('div');
+                    item.className = 'relative p-4 mb-4 rounded-md shadow-md bg-memo-light dark:bg-memo-dark memo-item';
+                    item.dataset.memoId = savedMemo.id;
+
+                    // ✅ 등록 시 '중요' 메모에 테두리 적용
+                    if (isPublicValue) {
+                        item.classList.add('border-2', 'border-red-500', 'dark:border-red-400');
+                    }
+
+                    item.innerHTML = `
+                        <p class="text-sm text-memo-text-light dark:text-memo-text-dark break-words">
+                            <strong>${savedMemo.title}</strong><br>${savedMemo.content.replace(/\n/g, "<br>")}
+                        </p>
+                        <button class="absolute top-2 right-2 text-memo-text-light dark:text-memo-text-dark hover:text-red-500 delete-memo">
+                            <span class="text-base material-symbols-outlined">close</span>
+                        </button>
+                    `;
+                    memoContainerGrid.prepend(item);
+
+                    const activeCategoryButton = categoryButtonsContainer.querySelector('.bg-primary');
+                    memoTitle.value = activeCategoryButton ? activeCategoryButton.textContent : '';
+                    memoContent.value = '';
+                    isPublicCheckbox.checked = false;
+
+                    // ✅ 편집창 테두리 초기화 로직 제거
+
+                    alert("메모가 등록되었습니다.");
+                } else {
+                    let errorMsg = '메모 저장에 실패했습니다.';
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.errors) {
+                            errorMsg = errorData.errors.map(e => e.defaultMessage).join('\n');
+                        } else if (errorData.message) {
+                            errorMsg = errorData.message;
+                        }
+                    } catch {}
+                    alert(errorMsg);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('메모 저장 중 오류가 발생했습니다.');
+            }
+        };
+        addMemoBtn.addEventListener('click', addMemo);
+
+        // --- 메모 삭제 로직 ---
+        memoContainerGrid.addEventListener('click', async function(e) {
+            const deleteButton = e.target.closest('.delete-memo');
+            if (deleteButton) {
+                const memoItem = e.target.closest('.memo-item');
+                const memoId = memoItem.dataset.memoId;
+                if (confirm('정말로 삭제하시겠습니까?')) {
+                    try {
+                        const response = await fetch(`/api/memos/${memoId}`, { method: 'DELETE' });
+                        if (response.ok) { memoItem.remove(); }
+                        else { alert('메모 삭제에 실패했습니다.'); }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                }
+            }
+        });
+
+        const initialActiveButton = categoryButtonsContainer.querySelector('.bg-primary');
+        if(initialActiveButton){ memoTitle.value = initialActiveButton.textContent; }
+
+        await loadMemos();
+    });
+
+    // --- Gemini API 로직 ---
+    async function askGemini() {
+        const memoContent = document.getElementById('memo-content');
+        const promptInput = document.getElementById('gemini-prompt');
+        const prompt = promptInput.value.trim();
+        if (!prompt) { alert('Gemini에게 물어볼 내용을 입력해주세요.'); return; }
+
+        const API_KEY = 'AIzaSyC4bYJ19q_mkrNm2AE2CvHQePRQ-l1xji8';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
+        memoContent.value = 'Gemini에게 물어보는 중...';
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    "x-goog-api-key": API_KEY,
+                    'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error.message || 'API 응답에 문제가 있습니다.');
+            }
+            const data = await response.json();
+            if (data.candidates && data.candidates.length > 0) {
+                memoContent.value = data.candidates[0].content.parts[0].text;
+            } else {
+                memoContent.value = '죄송합니다, 답변을 찾을 수 없습니다.';
+            }
+        } catch (error) {
+            memoContent.value = `오류가 발생했습니다: ${error.message}`;
+            console.error('API 호출 오류:', error);
+        } finally {
+            promptInput.value = '';
+        }
+    }
+    document.getElementById('gemini-ask-btn').addEventListener('click', askGemini);
+    document.getElementById('gemini-prompt').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') { event.preventDefault(); askGemini(); }
+    });
+</script>
+</body>
+</html>

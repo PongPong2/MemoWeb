@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" ><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SignUp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" ></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6366F1",
+                        "background-light": "#F9FAFB",
+                        "background-dark": "#111827",
+                        "form-background-light": "#FFFFFF",
+                        "form-background-dark": "#1F2937",
+                        "text-light": "#111827",
+                        "text-dark": "#F9FAFB",
+                        "subtext-light": "#6B7280",
+                        "subtext-dark": "#9CA3AF",
+                        "border-light": "#D1D5DB",
+                        "border-dark": "#4B5563"
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+
+        const handleClick = () => {
+            const NAME = document.getElementById("name");
+            const EMAIL = document.getElementById("email");
+            const PW1 = document.getElementById("password");
+            const PW2 = document.getElementById("confirm-password");
+
+            if(!NAME.value){
+                alert("이름을 입력하세요 !");
+                return ;
+            }
+            if(!EMAIL.value){
+                alert("이메일을 입력하세요 !");
+                return ;
+            }
+            if(!PW1.value){
+                alert("비밀번호를 입력하세요 !");
+                return ;
+            }
+            if(PW1.value !== PW2.value){
+                alert("비밀번호가 일치하지 않습니다 !");
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @font-face {
+            font-family: 'Isamanru';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+            font-weight: 300;
+            font-display: swap;
+        }
+        h1{
+            font-family: 'Isamanru',serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark flex items-center justify-center min-h-screen">
+<div class="w-full max-w-md mx-auto p-8">
+<div class="text-center mb-8">
+<h1 class="text-4xl font-bold text-text-light dark:text-text-dark" style="color: #16A34A">Memo Studio</h1>
+</div>
+<div class="bg-form-background-light dark:bg-form-background-dark p-8 rounded-lg shadow-md">
+    <form action="/signup" th:object="${memberDto}" method="post">
+<div class="mb-4">
+<label  class="block text-sm font-medium text-text-light dark:text-text-dark mb-2" for="name" style="color: #16A34A">Name</label>
+<input class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-md bg-form-background-light dark:bg-form-background-dark text-text-light dark:text-text-dark focus:ring-primary focus:border-primary" id="name" th:field="*{name}" placeholder="Name" type="text" />
+</div>
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2" for="email" style="color: #16A34A">Email</label>
+        <input class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-md bg-form-background-light dark:bg-form-background-dark text-text-light dark:text-text-dark focus:ring-primary focus:border-primary" id="email" placeholder="Email" th:field="*{email}" type="email" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red;"></div>
+    </div>
+<div class="mb-4">
+<label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2" for="password" style="color: #16A34A">Password</label>
+<input class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-md bg-form-background-light dark:bg-form-background-dark text-text-light dark:text-text-dark focus:ring-primary focus:border-primary" id="password" placeholder="PassWord" type="password" th:field="*{pw}"/>
+</div>
+<div class="mb-6">
+<label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2" for="confirm-password" style="color: #16A34A">Confirm Password</label>
+<input class="w-full px-4 py-2 border border-border-light dark:border-border-dark rounded-md bg-form-background-light dark:bg-form-background-dark text-text-light dark:text-text-dark focus:ring-primary focus:border-primary" id="confirm-password" placeholder="Confirm PassWord" type="password"/>
+</div>
+        <button class="w-full bg-[#16A34A] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#15803d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16A34A] dark:focus:ring-offset-[var(--card-dark)] transition duration-300" type="submit" onclick="handleClick()">Sign Up</button>
+        <button class="w-full bg-[#16A34A] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#15803d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16A34A] dark:focus:ring-offset-[var(--card-dark)] transition duration-300" type="button" onclick="location.href='/login'" style="margin-top: 0.5em">Back</button>
+</form>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" ></script>
+</body></html>
